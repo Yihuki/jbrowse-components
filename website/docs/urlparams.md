@@ -196,6 +196,55 @@ at once) and can specify the loc, tracks, assembly, and view type, or other view
 specific parameters (different view types may accept different params, e.g.
 dotplot has two assemblies)
 
+#### Advanced track configuration
+
+The `tracks` array can contain either simple trackId strings or objects with
+additional configuration options:
+
+```json
+{
+  "views": [
+    {
+      "assembly": "volvox",
+      "loc": "ctgA:1-5100",
+      "type": "LinearGenomeView",
+      "tracks": [
+        "simple_track_id",
+        {
+          "trackId": "my_bam_track",
+          "displaySnapshot": {
+            "type": "LinearPileupDisplay",
+            "height": 300
+          }
+        },
+        {
+          "trackId": "my_wiggle_track",
+          "displaySnapshot": { "minScore": 0, "maxScore": 100 }
+        }
+      ]
+    }
+  ]
+}
+```
+
+Each track object supports the following properties:
+
+- `trackId` (required): The track identifier from config.json
+- `displaySnapshot` (optional): Initial display state. Can include:
+  - `type`: Override the display type (e.g., `LinearPileupDisplay`,
+    `LinearSNPCoverageDisplay`, `LinearReadArcsDisplay`)
+  - `height`: Display height in pixels
+  - `minScore`, `maxScore`: Score range for quantitative tracks
+  - Other display-specific settings
+- `trackSnapshot` (optional): Initial track state such as `pinned: true`
+
+This is useful for:
+
+- Opening a track with a specific display type (e.g., showing a BAM file as arcs
+  instead of pileup)
+- Setting initial display height or color scheme
+- Configuring autoscale settings for quantitative tracks
+
 ### Circular view
 
 Here is an example of a JSON session spec for a Circular View
